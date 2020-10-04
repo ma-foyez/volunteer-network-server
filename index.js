@@ -45,7 +45,7 @@ client.connect(err => {
             })
     })
 
-    // post new volunteer for event
+    // add new volunteer for event
     const RegisterVolunteer = client.db("VolunteeerNetworkDB").collection("volunteer");
     app.post('/registerVolunteer', (req, res) => {
         const newVolunteer = req.body;
@@ -55,7 +55,7 @@ client.connect(err => {
             })
     })
 
-    // load volunteer activities
+    // load single volunteer activities
     app.get('/volunteerActivities', (req, res) => {
         RegisterVolunteer.find({ email: req.query.email })
             .toArray((err, documents) => {
@@ -63,10 +63,19 @@ client.connect(err => {
             })
     })
 
-    app.delete('/delete', (req, res) => {
+    // delete volunteer from database
+    app.delete('/deleteVolunteer', (req, res) => {
         RegisterVolunteer.deleteOne({ _id: ObjectId(req.query.id) })
             .then(result => {
-                res.send(result.deletedCount > 0)
+                res.send(result)
+            })
+    })
+
+    // delete single event from database
+    app.delete('/deleteEvent', (req, res) => {
+        EventCollection.deleteOne({ _id: ObjectId(req.query.id) })
+            .then(result => {
+                res.send(result)
             })
     })
 
@@ -78,6 +87,27 @@ client.connect(err => {
                 res.send(documents);
             })
     })
+
+    // load single event & update
+
+    // load single event
+    app.get('/LoadSingleEvent', (req, res) => {
+        EventCollection.find({ _id: ObjectId(req.query.id) })
+            .toArray((err, documents) => {
+                res.send(documents[0]);
+            })
+    })
+    //update single event
+    //update single activity
+    app.patch('/updateEvent/', (req, res) => {
+        EventCollection.updateOne({ _id: ObjectId(req.query.id) }, {
+            $set: { eventTitle: req.body.eventTitle, eventDate: req.body.eventDate, description: req.body.description }
+        })
+            .then(result => {
+                res.send(result)
+            })
+    })
+
     // close connection
 });
 
