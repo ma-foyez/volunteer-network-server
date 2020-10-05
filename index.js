@@ -51,7 +51,7 @@ client.connect(err => {
         const newVolunteer = req.body;
         RegisterVolunteer.insertOne(newVolunteer)
             .then(result => {
-                console.log(result)
+                res.send(result.insertedCount > 0);
             })
     })
 
@@ -121,9 +121,6 @@ client.connect(err => {
     })
     // close connection
 });
-
-
-
 
 app.get('/', function (req, res) {
     res.send('Hlw, dear! I am wokring properly')
