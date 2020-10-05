@@ -98,16 +98,27 @@ client.connect(err => {
             })
     })
     //update single event
-    //update single activity
     app.patch('/updateEvent/', (req, res) => {
         EventCollection.updateOne({ _id: ObjectId(req.query.id) }, {
+          
             $set: { eventTitle: req.body.eventTitle, eventDate: req.body.eventDate, description: req.body.description }
         })
             .then(result => {
-                res.send(result)
+               res.send(result)
             })
     })
 
+      //update single volunteer information
+      app.patch('/updateVolunteerInfo/', (req, res) => {
+        RegisterVolunteer.updateOne({ _id: ObjectId(req.query.id) }, {
+          
+            $set: { name: req.body.name, email: req.body.email, eventTitle: req.body.eventTitle, eventDate: req.body.eventDate }
+        })
+            .then(result => {
+               res.send(result)
+          
+            })
+    })
     // close connection
 });
 
